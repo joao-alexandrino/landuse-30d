@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Land Use</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata:200,300,regular,500,600,700,800,900" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/061dba2a3e.js" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+          margin: 0;
+          padding: 0;
+          font-family: Poppins;
+          font-size: 14px;
+		}
+        #map {
+            position: absolute;
+            top: 0; 
+            bottom: 0; 
+            width: 100%;
+		}
+        #panel-howto {
+            background: white;
+            width: 350px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: absolute;
+            right: 10px;
+            bottom: 790px;
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.20);
+            color: rgba(0, 0, 0, 0.75);
+            border-radius: 8px;
+		}
+        p.howto {
+            font-family: Inconsolata;
+            font-weight: 800;
+            font-size: 14px;
+        }
+        #panel-legend {
+            background: white;
+            width: 350px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: absolute;
+            right: 10px;
+            bottom: 400px;
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.20);
+            color: rgba(0, 0, 0, 0.75);
+            border-radius: 8px;
+		}
+        li {
+			padding: 5px 0px;
+		}
+      	h3 {
+            text-transform: uppercase;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            margin: 0;
+            padding: 5px 15px;
+		}
+        p {
+            margin: 10px 15px 10px 15px;
+            text-align:justify;
+            font-size: 12px;
+            line-height: 1.4;
+            color: rgba(0, 0, 0, 0.6);
+        }
+      	ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 15px;
+            font-family: Inconsolata;
+            font-weight: 600;
+		}
+      	ul span {
+            width: 10px;
+            height: 10px;
+            margin: 0;
+            display: inline-block;
+            margin-right: 10px;
+            border-radius: 50%;
+		}
+		dd {
+			margin-left: 0px;
+            margin-top: 0px;
+			margin-bottom: 0px;
+            font-family: Inconsolata;
+			font-weight: 600;
+            color: rgba(0, 0, 0, 0.4);
+		}
+		dt {
+			margin-top: 10px;
+		}
+		dl {
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-top: 0px;
+			margin-bottom: 0px;
+		}
+		.mapboxgl-popup-content {
+			min-width: 250px;
+			max-width: 400px;
+            max-height: fit-content;
+            align-self: center;
+            font-family: Poppins;
+            font-weight: 700;
+			font-size: 14px;
+            font-weight: bold;
+			color: rgba(0, 0, 0, 0.75);
+			box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.20);
+            border-radius: 8px;
+		}
+        #panel-about {
+            background: white;
+            width: 350px;
+            height: 135px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: absolute;
+            right: 10px;
+            bottom: 255px;
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.20);
+            color: rgba(0, 0, 0, 0.75);
+            border-radius: 8px;
+		}
+      	
+        #panel-font {
+            background: white;
+            width: 350px;
+            height: 140px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position:absolute;
+            right: 10px;
+            bottom: 105px;
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+            color: rgba(0, 0, 0, 0.75);
+            border-radius: 8px;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 5px 15px 5px;
+            font-family: Inconsolata;
+            font-weight: 600;
+        }
+        #panel-led {
+            background: white;
+            width: 310px;
+            margin-right: 40px;
+            height: 85px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position:absolute;
+            right: 10px;
+            bottom: 10px;
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+            color: rgba(0, 0, 0, 0.75);
+            border-radius: 8px;
+        }
+        img.svg-led {
+            height: 40px;
+        }
+        h4 {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-weight: 700;
+            margin: 0;
+            padding: 5px 15px;
+        }
+        .fa-twitter-square {
+            color: #1DA1F2;
+            font-size: 16px;
+            margin-left: 3px;
+            vertical-align: middle;
+        }
+        .svg-led {
+            padding: 5px 15px;
+            height: 50px;
+        }
+
+
+    </style>
+</head>
+  
+<body>
+    <div id="map"></div>
+
+    <div id="strip"></div>
+
+    <div id="panel-howto">
+        <p class="howto">You can zoom, click and rotate this map 🗺️</p>
+    </div>
+
+    <div id="panel-legend">
+      <h3>Land Use</h3>
+      <p>Land use data is being used to represent which social aspect each tax lot fulfills. As a key feature for city planners, it can indicate how facilities and services are distributed over the urban fabric.</p>
+      <ul>
+        <li><span style="background: #F9EDDB;"></span>Family Buildings</li>
+        <li><span style="background: #F6D9CB;"></span>Mixed Residential & Commercial Buildings</li>
+        <li><span style="background: #F1B89C;"></span>Commercial & Office Buildings</li>
+        <li><span style="background: #DF7649;"></span>Services</li>
+        <li><span style="background: #CF4F4F;"></span>Industrial & Manufacturing</li>
+        <li><span style="background: #BEC6CC;"></span>Transportation & Utility</li>
+        <li><span style="background: #BDE7F4;"></span>Public Facilities & Institutions</li>
+        <li><span style="background: #A3D393;"></span>Open Space & Outdoor Recreation</li>
+        <li><span style="background: #8DA2B4;"></span>Vacant Land</li>
+        <li><span style="background: #F9F9F9; border: 1px solid #ccc; box-sizing: border-box"></span>No 'Data'</li>
+      </ul>
+    </div>
+
+    <div id="panel-font">
+        <h4 class="font">Database font</h4>
+        <ul>
+            <li>Tax lots: SEFIN (2012)</li>
+            <li>Land use: SEFIN (2012)</li>
+            <li>Buildings: SEFIN (2016)</li>
+            <li>Street network: SEFIN (2017)</li>
+        </ul>
+    </div>
+
+    <div id="panel-about">
+        <h4 class="about">About this map</h4>
+        <p> The map cutout presented is a initial proposition for the boundaries of a health innovation district in Fortaleza, Brazil. The research project is the result of a partnership between the State Health Department (SESA) and the Federal University of Ceará (UFC).</p>
+    </div>
+
+    <div id="panel-led">
+        <h4>#30DayMapChallenge <a href="https://twitter.com/search?q=%2330DayMapChallenge" target="_blank"> <i class="fab fa-twitter-square"></i></a></h4>
+        <a href="https://www.led-ufc.com" target="_blank"><img class="svg-led" src="https://static.wixstatic.com/media/6904d6_d119931d0782418b82648b6c5e039857~mv2.png/v1/fill/w_195,h_49,al_c,q_85,usm_0.66_1.00_0.01/637355_39bf45638e3d4b2987ef794a6317121f_.webp" alt="laboratorio de experiencias digitais"></a>
+    </div>
+
+    <script>
+
+        mapboxgl.accessToken = 'pk.eyJ1Ijoiam9hb3ZpY3Rvcm1vdGFhIiwiYSI6ImNrd2dlM201cjAydGsyd2w1ZmpwdDZmN28ifQ.PInCPIw_Sju3bcWwnhEOgQ';
+        const map = new mapboxgl.Map({
+            container: 'map', // container id
+            style: 'mapbox://styles/joaovictormotaa/ckwge5r4m84l516oi8dwf9poo', // style URL
+            center: [-38.54884, -3.74732], // starting position [lng, lat]
+            zoom: 15, // starting zoom
+            minZoom: 15,
+            maxZoom: 20,
+            antialias: true,
+            hash: true
+        });
+    
+		var landUseNames = {
+			'1': 'Family Buildings',
+			'2': 'Mixed Residential & Commercial Buildings',
+			'3': 'Commercial & Office Buildings',
+			'4': 'Services',
+			'5': 'Industrial & Manufacturing',
+			'6': 'Transportation & Utility',
+			'7': 'Public Facilities & Institution',
+			'8': 'Open Space & Outdoor Recreation',
+			'9': 'Agriculture',
+			'10': 'Vacant Land'
+		};
+    
+        const nav = new mapboxgl.NavigationControl({
+            visualizePitch: true            
+        });
+
+		map.addControl(nav, 'bottom-right');
+	
+		map.on('mousemove', function(event) {
+			//console.log(event);
+			if (map.loaded()) {
+				var features = map.queryRenderedFeatures(event.point, {
+					layers: ['lots']
+				});
+				
+				if (features.length) {
+					map.getCanvas().style.cursor = 'alias';
+				} else {
+					map.getCanvas().style.cursor = '';
+				}
+			}
+		});
+		
+		map.on('click', function(event) {
+			var geometry = event.point;
+			var parameters = {
+				layers: ['lots']
+			};
+			var features = map.queryRenderedFeatures(geometry, parameters);
+			var lot = features[0];
+			console.log(lot);
+			
+			if(features.length) {
+			    var bbl = lot.properties.BBL || '―';
+				var landuse = landUseNames[lot.properties.landuse] || '―';
+				var domain = lot.properties.domain || '―';
+				var ownership = lot.properties.ownership || '―';
+				var id = lot.properties.id || '―';
+				console.log(bbl, landuse, domain, ownership, id);
+
+
+				var popup = new mapboxgl.Popup()
+					.setLngLat(event.lngLat)
+					.setHTML('<dl>' +
+                        '<dt>BBL</dt>' +
+                        '<dd>' + bbl + '</dd>' +
+                        '<dt>Land Use</dt>' +
+                        '<dd>' + landuse + '</dd>' +
+                        '<dt>Domain</dt>' +
+                        '<dd>' + domain + '</dd>' +
+                        '<dt>Ownership</dt>' +
+                        '<dd>' + ownership + '</dd>' +
+                        '<dt>Id</dt>' +
+                        '<dd>' + id + '</dd>' +
+					'</dl>')
+					.addTo(map);
+			}
+           
+		});
+
+        // map.dragRotate.disable(); // disable map rotation using right click + drag
+ 
+        // map.touchZoomRotate.disableRotation(); // disable map rotation using touch rotation gesture
+
+    </script>
+
+</body>
+</html>
